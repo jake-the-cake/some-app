@@ -1,0 +1,18 @@
+{
+  "name": "toolbag-services",
+  "version": "0.0.0",
+  "description": "A server for different small applications that will hopefully make life easier.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "author": "Jake The Cake",
+  "license": "ISC",
+  "dependencies": {
+		"express": "^4.21.2"
+  },
+	"devDependencies": {
+		"dotenv": "^16.4.7"
+	}
+}
