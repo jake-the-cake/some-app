@@ -4,12 +4,37 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Application Loading...</title>
+	<link rel="stylesheet" href="/static/server/style.css">
 </head>
 <body>
-	<div id="load-screen" class="load-screen"></div>
-	<div id="root">
-		Content Loading...
-	</div>
+	<nav>
+		<ul class="app-menu">
+			<li>Topics</li>
+			<li class="new-block"></li>
+			<li>Install Apps</li>
+		</ul>
+		<div class="app-content">
+			<span>
+				Quiggle Studio
+			</span>
+			<div class="row">
+				<button>Tab Name</button>
+				<button>Tab Name</button>
+				<div class="app-dropdown">
+					<span>See Apps</span>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<main>
+		<div id="load-screen" class="load-screen"></div>
+		<div id="root">
+			Content Loading...
+		</div>
+	</main>
+	<footer>
+		Status
+	</footer>
 	<script type="module" src="/static/server/index.js"></script>
 </body>
 </html>

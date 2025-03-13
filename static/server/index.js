@@ -1,4 +1,11 @@
 window.addEventListener('DOMContentLoaded', () => {
+	const dropdown = document.querySelector('.app-dropdown')
+	dropdown.addEventListener('mouseover', (e) => {
+		// e.target
+		const menu = document.querySelector('.app-menu')
+		console.log(menu)
+		menu.classList.add('dropped')
+	})
 	const [app, route] = parseApplicationRoute(new URLSearchParams(window.location.search))
 	history.pushState({}, '', `/${app}${route}`)
 	bindScript(app)

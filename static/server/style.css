@@ -1,0 +1,132 @@
+:root {
+	
+	--y1: 0;
+	--y2: 0;
+
+	--app-hue: 134;
+	
+	--app-blue: #126170;
+
+	--app-main: hsl(var(--app-hue), 40%, 32%);
+	--app-main-dim: hsl(var(--app-hue), 40%, 42%, .8);
+	--app-main-half: hsl(var(--app-hue), 40%, 42%, .5);
+	--app-main-tran: hsl(var(--app-hue), 40%, 42%, .25);
+	--app-main-bright: hsl(var(--app-hue), 40%, 62%);
+	--app-main-dark: hsl(var(--app-hue), 81%, 8%);
+	--app-main-less-dark: hsl(var(--app-hue), 81%, 14%);
+	--app-light: #efefef;
+
+	--app-shadow: 0 var(--y1) 3px var(--app-main-dark),
+				inset 0 var(--y2) 3px -2px var(--app-main-less-dark);
+}
+
+body {
+	margin: 0;
+	background-color: var(--app-light);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100vh;
+	color: var(--app-main-dark);
+}
+
+* {
+	box-sizing: border-box;
+	scroll-behavior: smooth;
+}
+
+nav, main,	footer { width: 100vw; }
+
+nav, footer {
+	font-family: Tahoma, sans-serif;
+	color: var(--app-light);
+	text-shadow: 1px 1px 0 var(--app-main-dark);
+	font-size: .7rem;
+	position: relative;
+	
+	.app-content {
+		box-shadow: var(--app-shadow);
+		display: flex;
+		justify-content: space-between;
+		background-color: var(--app-main);
+		z-index: 2;
+		position: relative;
+	}
+}
+
+nav {
+	--y1: 1px;
+	--y2: -3px;
+	
+	.app-menu {
+		--y1: 1px;
+		--y2: -3px;
+
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		position: absolute;
+		top: calc(-100% - 6px);
+		right: 0px;
+		width: max-content;
+		z-index: -1;
+		transition: top .3s;
+		box-shadow: var(--app-shadow);
+		background-color: var(--app-blue);
+		padding: 3px;
+
+		&.dropped {
+			top: 1.2rem;
+		}
+
+		li {
+			background-color: white;
+			padding: 2px .5rem;
+			margin-top: 2px;
+
+			&.new-block {
+				border-top: 1px solid red;
+				padding: 0;
+			}
+		}
+	}
+
+	.row {
+		gap: .5rem;
+	}
+
+	button {
+		font-size: .7rem;
+		height: 1rem;
+		background-color: var(--app-blue);
+		margin-block: 2px;
+		padding: .2px .5rem;
+		border-width: 1px;
+		border-radius: 999px;
+		border-color: var(--app-main-dim);
+		color: var(--app-light);
+		cursor: pointer;
+		text-shadow: 1px 1px 0 var(--app-main-dark);
+		transition: background-color .3s, color .3s;
+	}
+
+	button:hover {
+		background-color: var(--app-light);
+		color: var(--app-blue);
+	}
+}
+
+main {
+	flex: 1;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+footer {
+	--y1: -1px;
+	--y2: 3px;
+}
+
+.row {
+	display: flex;
+}
