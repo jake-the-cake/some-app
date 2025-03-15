@@ -48,6 +48,7 @@ nav, footer {
 		box-shadow: var(--sys-shadow);
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 		background-color: var(--sys-main);
 		z-index: 2;
 		position: relative;
@@ -87,12 +88,15 @@ nav {
 	}
 
 	button {
-		font-size: .7rem;
-		/* height: 1rem; */
+		font-size: .6rem;
+		margin-top: 2px;
 		background-color: var(--sys-main-less-dark);
 		padding: .2rem .5rem;
 		border-width: 1px;
 		border-color: var(--sys-main-dim);
+		border-top: none;
+		border-bottom: none;
+		border-radius: .5rem .5rem 0 0;
 		color: var(--sys-light);
 		cursor: pointer;
 		text-shadow: 1px 1px 0 var(--sys-main-dark);
@@ -100,13 +104,16 @@ nav {
 	}
 
 	button:hover {
-		background-color: var(--sys-light);
-		color: var(--sys-blue);
+		background-color: var(--sys-main-dark);
 	}
 
 	.sys-dropdown {
 		cursor: pointer;
 		padding-inline: .5rem;
+	}
+
+	.row {
+		align-items: baseline;
 	}
 }
 
@@ -123,4 +130,8 @@ footer {
 
 .row {
 	display: flex;
+}
+
+.left-05 {
+	margin-left: .5rem;
 }
