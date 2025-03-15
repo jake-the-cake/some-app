@@ -1,8 +1,8 @@
 window.addEventListener('DOMContentLoaded', () => {
-	const dropdown = document.querySelector('.app-dropdown')
+	const dropdown = document.querySelector('.sys-dropdown')
 	dropdown.addEventListener('mouseover', (e) => {
 		// e.target
-		const menu = document.querySelector('.app-menu')
+		const menu = document.querySelector('.sys-menu')
 		console.log(menu)
 		menu.classList.add('dropped')
 	})
