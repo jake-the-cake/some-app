@@ -67,10 +67,10 @@ nav {
 		padding: 0;
 		margin: 0;
 		position: absolute;
-		top: calc(-100% - 6px);
+		top: -2000vh;
 		right: 0px;
 		width: max-content;
-		z-index: -1;
+		z-index: 2;
 		transition: top .3s;
 		box-shadow: var(--sys-shadow);
 		background-color: var(--sys-main);
@@ -80,10 +80,16 @@ nav {
 			background-color: var(--sys-main-less-dark);
 			padding: 2px .5rem;
 			margin-top: 1px;
+			cursor: pointer;
+			transition: background-color .3s;
 
-			&.non-sys {
+			&.non-app {
 				background-color: var(--sys-main-dark);
 			}
+		}
+
+		li:hover {
+			background-color: var(--sys-main-dim);
 		}
 	}
 
@@ -94,7 +100,6 @@ nav {
 		padding: .2rem .5rem;
 		border-width: 1px;
 		border-color: var(--sys-main-dim);
-		border-top: none;
 		border-bottom: none;
 		border-radius: .5rem .5rem 0 0;
 		color: var(--sys-light);
@@ -121,12 +126,81 @@ main {
 	flex: 1;
 	overflow-x: hidden;
 	overflow-y: scroll;
+	position: relative;
 }
 
 footer {
 	--y1: -1px;
 	--y2: 3px;
 }
+
+.sys-loader {
+	width: 100%;
+	height: 100%;
+	background-color: var(--sys-main-bright);
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	display: grid;
+	place-items: center;
+
+	.background {
+		--degrees: 0deg;
+		width: 2rem;
+		height: 2rem;
+		background: linear-gradient(var(--degrees), var(--sys-main), var(--sys-main-less-dark), var(--sys-main-dark));
+		border-radius: 50%;
+		position: relative;
+		overflow: hidden;
+	}
+	
+	.center, .arm {
+		position: absolute;
+		background-color: var(--sys-main-bright);
+	}
+
+	.background, .container {
+		transform: rotate(0deg);
+		transition: rotate .1s;
+		transform-origin: center;
+	}
+
+	
+	.container {
+		display: grid;
+		place-items: center;
+		width: 100%;
+		height: 100%;
+		position: relative;
+	}
+
+	.arm {
+		border: 2px solid var(--sys-main-dim);
+		width: 98%;
+		border-radius: 999px;
+		height: 13%;
+}
+
+.arm:nth-child(2) {
+		transform: rotate(45deg);
+}
+
+.arm:nth-child(3) {
+		transform: rotate(90deg);
+}
+
+.arm:nth-child(4) {
+		transform: rotate(135deg);
+}
+
+	.center {
+		border-radius: 50%;
+		width: 45%;
+		height: 45%;
+	}	
+}
+
 
 .row {
 	display: flex;

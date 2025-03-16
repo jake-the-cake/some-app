@@ -1,3 +1,11 @@
+import { Navbar } from '../lib/sys/navbar.js'
+
+function newDiv(classList = []) {
+	const element = document.createElement('div')
+	if (Array.isArray(classList)) element.classList = classList
+	return element
+}
+
 function valueTypeError(expectedType, value) {
 	return TypeError(`Expected ${ expectedType } but received ${ typeof(value) }`)
 }
@@ -7,55 +15,41 @@ function notString(value) {
 	return false
 }
 
-class Navbar {
+class LoadScreen {
 
 	constructor() {
-		this.element = document.querySelector('nav')
-		if (this.element === null) throw Error('No "nav" element found.')
-		this.name = this.element.querySelector('#sys-name')
-		if (this.name === null) throw Error('No navbar element with id "sys-name".')
-		this.dropdown = this.element.querySelector('#sys-dropdown')
-		if (this.dropdown === null) throw Error('No navbar element with id "sys-dropdown".')
-		this.menu = this.element.querySelector('#sys-menu')
-		if (this.menu === null) throw Error('No navbar element with id "sys-menu".')
-	}	
+		this.element = newDiv(['sys-loader'])
+		this.spinnerBg = newDiv(['background'])
+		this.spinner = newDiv(['container'])
 	
-	setMenuDown() {
-		this.menu.style.top = `${ this.element.offsetHeight }px`
-	}
-	
-	setMenuUp() {
-		this.menu.style.top = `-${ this.menuHeight }px`
+		this.element.appendChild(this.spinnerBg)
+		this.spinnerBg.appendChild(this.spinner)
+		this.spinner.appendChild(newDiv(['arm']))
+		this.spinner.appendChild(newDiv(['arm']))
+		this.spinner.appendChild(newDiv(['arm']))
+		this.spinner.appendChild(newDiv(['arm']))
+		this.spinner.appendChild(newDiv(['center']))
 	}
 	
-	setupMenu() {
-		this.menuHeight = this.menu.offsetHeight
-		this.setMenuUp()
-		this.createMenuListener()
-		// this.setMenuDown()
+	start() {
+		this.interval =	setInterval(() => {
+			this.spinner.style.rotate = parseInt(this.spinner.style.rotate || 0) + 24 + 'deg'
+			this.spinnerBg.style.rotate = parseInt(this.spinnerBg.style.rotate || 0) - 16 + 'deg'
+		}, 100)
 	}
 
-	createMenuListener() {
-		this.dropdown.addEventListener('mouseenter', (e) => {
-			this.setMenuDown()
-		})
+	addLoader(element = null) {
+		if (!element) element = document
+		this.parent = element
+		this.parent.appendChild(this.element)
+		this.start()
 	}
-
-	setupTabs() {
-		return
-	}
-
-	setup(object) {
-		this.object = object
-		this.name.innerText = this.object.name
-		this.setupMenu()
-		// load tabs
+	
+	stop() {
+		clearInterval(this.interval)
+		this.parent.removeChild(this.element)
 	}
 }
-
-
-
-
 
 class System {
 
@@ -63,46 +57,62 @@ class System {
 		if (notString(name)) throw valueTypeError('string', name)
 		this.name = name
 		this.isHealthy = true
-		this.load()
-
-		
-		
-		
+		this.isLoading = false
+		this.load()		
 		if (this.isHealthy === true) this.start()
-		}
+	}
 	
 	handleNavbar() {
 		this.navbar = new Navbar()
 		this.navbar.setup(this)
-		
-
-		// check for open tabs
-		
+		console.log('TODO: check for open tabs')
 	}
 	
 	load() {
+		this.isLoading = true
 		try {
-			// start loader
-		
-			// handle nav
+			this.main = document.querySelector('main')
+			this.root = this.main.querySelector('#root')
+
+			this.loader = new LoadScreen()
+			this.loader.addLoader(this.main)
+
 			this.handleNavbar()
 		
 			// handle footer
 			// this.handleFooter()
 		} catch(e) {
-
 			// todo: set main section to error
-			console.log(e)
+			this.loadErrorPage(500)
 			throw Error('Could not load system interface.')
 		}
 	}
+	
+	loadErrorPage(status) {
+		this.root.innerText = 'Oops'
+	}
+
+	recover() {
+		console.warn('TODO: add recovery sytem')
+	}
 
 	start() {
-		// search for app
-	
-		// setup app route
-	
-		// load content
+		[this.app, this.route] = parseApplicationRoute(new URLSearchParams(window.location.search))
+		history.pushState({}, '', `/${ this.app }${ this.route }`)
+		bindScript(this.app)
+
+		if (!this.isHealthy) return this.recover()
+
+			setTimeout(() => {
+			this.isLoading = false
+		}, 500)
+
+		const interval = setInterval(() => {
+			if (!this.isLoading) {
+				this.loader.stop()
+				clearInterval(interval)
+			}
+		}, 100)
 	}
 }
 
@@ -121,9 +131,6 @@ const settings = {
 
 window.addEventListener('DOMContentLoaded', () => {
 	const system = new System(settings.name)
-	// const [app, route] = parseApplicationRoute(new URLSearchParams(window.location.search))
-	// history.pushState({}, '', `/${app}${route}`)
-	// bindScript(app)
 })
 
 function parseApplicationRoute(params) {
