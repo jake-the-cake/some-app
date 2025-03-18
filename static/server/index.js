@@ -28,7 +28,6 @@ class System {
 	
 	handleNavbar() {
 		this.navbar = new Navbar(this)
-		console.log(this.navbar)
 		this.navbar.setup(this)
 		console.log('TODO: check for open tabs')
 	}
@@ -78,6 +77,7 @@ class System {
 	}
 
 	changeApp(app, route = '') {
+		if (!this.isLoading) this.loader.addLoader(this.main)
 		history.pushState({}, '', `/${ app }${ route }`)
 		bindScript(app)
 		this.startApp()

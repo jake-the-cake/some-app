@@ -1,10 +1,3 @@
-import { installedApps } from "../config/installed.js"
-class AppController {
-	constructor() {
-		this.route
-	}
-}
-
 class Navbar {
 
 	constructor(system) {
@@ -45,15 +38,27 @@ class Navbar {
 	}
 
 	addNenuLinks() {
-		installedApps.forEach(app => {	
-			const link = document.createElement('li')
-			link.innerText = app.charAt(0).toUpperCase() + app.slice(1)
-			link.onclick = () => {
-				this.system.changeApp('something')
-				this.setMenuUp()
-			}
-			this.menu.appendChild(link)
-		})
+    fetch('/static/data/apps.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to load apps.json: ${response.statusText}`)
+            }
+            return response.json()
+        })
+        .then(appData => {
+            Object.keys(appData.apps).forEach(app => {
+                const link = document.createElement('li')
+                link.innerText = appData['apps'][app].label
+                link.onclick = () => {
+                    this.system.changeApp(app)
+                    this.setMenuUp()
+                }
+                this.menu.appendChild(link)
+            })
+        })
+        .catch(error => {
+            console.error('Error loading apps.json:', error)
+        })
 	}
 
 	menuToggleListener(e) {

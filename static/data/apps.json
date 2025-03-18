@@ -1,0 +1,18 @@
+{
+	"apps": {
+		"topics": {
+			"name": "topics",
+			"label": "Discussion Topics",
+			"href": "/topics",
+			"description": "Keep track of relevant topics that need be discussed, schedule times for discussions, add notes, and view past topics and their outcomes.",
+			"pages": {
+				"home": ["/", "home.html"],
+				"add": ["/add-topic", "forms/add.html"]
+			},
+			"version": "0.0.1"
+		}
+	},
+	"installed": [
+		"topics"
+	]
+}
