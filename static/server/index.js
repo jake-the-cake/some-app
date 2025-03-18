@@ -1,9 +1,9 @@
+import { LoadScreen } from '../lib/sys/loader.js'
 import { Navbar } from '../lib/sys/navbar.js'
 
-function newDiv(classList = []) {
-	const element = document.createElement('div')
-	if (Array.isArray(classList)) element.classList = classList
-	return element
+
+const settings = {
+	name: 'Nameless System'
 }
 
 function valueTypeError(expectedType, value) {
@@ -13,42 +13,6 @@ function valueTypeError(expectedType, value) {
 function notString(value) {
 	if (typeof(value) !== 'string') return true
 	return false
-}
-
-class LoadScreen {
-
-	constructor() {
-		this.element = newDiv(['sys-loader'])
-		this.spinnerBg = newDiv(['background'])
-		this.spinner = newDiv(['container'])
-	
-		this.element.appendChild(this.spinnerBg)
-		this.spinnerBg.appendChild(this.spinner)
-		this.spinner.appendChild(newDiv(['arm']))
-		this.spinner.appendChild(newDiv(['arm']))
-		this.spinner.appendChild(newDiv(['arm']))
-		this.spinner.appendChild(newDiv(['arm']))
-		this.spinner.appendChild(newDiv(['center']))
-	}
-	
-	start() {
-		this.interval =	setInterval(() => {
-			this.spinner.style.rotate = parseInt(this.spinner.style.rotate || 0) + 24 + 'deg'
-			this.spinnerBg.style.rotate = parseInt(this.spinnerBg.style.rotate || 0) - 16 + 'deg'
-		}, 100)
-	}
-
-	addLoader(element = null) {
-		if (!element) element = document
-		this.parent = element
-		this.parent.appendChild(this.element)
-		this.start()
-	}
-	
-	stop() {
-		clearInterval(this.interval)
-		this.parent.removeChild(this.element)
-	}
 }
 
 class System {
@@ -63,7 +27,8 @@ class System {
 	}
 	
 	handleNavbar() {
-		this.navbar = new Navbar()
+		this.navbar = new Navbar(this)
+		console.log(this.navbar)
 		this.navbar.setup(this)
 		console.log('TODO: check for open tabs')
 	}
@@ -96,17 +61,35 @@ class System {
 		console.warn('TODO: add recovery sytem')
 	}
 
-	start() {
-		[this.app, this.route] = parseApplicationRoute(new URLSearchParams(window.location.search))
-		history.pushState({}, '', `/${ this.app }${ this.route }`)
-		bindScript(this.app)
+	parseApplicationRoute(params) {
+		return [
+			window.location.pathname.split('/')[2],
+			params.get('route')
+		]
+	}
 
+	getApp() {
+		[this.app, this.route] = this.parseApplicationRoute(new URLSearchParams(window.location.search))
+	}
+
+	useLink(route) {
+		this.route = route
+		this.changeApp(this.app, this.route)
+	}
+
+	changeApp(app, route = '') {
+		history.pushState({}, '', `/${ app }${ route }`)
+		bindScript(app)
+		this.startApp()
+	}
+	
+	startApp() {
 		if (!this.isHealthy) return this.recover()
-
-			setTimeout(() => {
+		
+		setTimeout(() => {
 			this.isLoading = false
 		}, 500)
-
+		
 		const interval = setInterval(() => {
 			if (!this.isLoading) {
 				this.loader.stop()
@@ -114,31 +97,17 @@ class System {
 			}
 		}, 100)
 	}
+	
+	start() {
+		this.getApp()
+		this.changeApp(this.app, this.route)
+	}
 }
-
-const settings = {
-	name: 'Nameless System'
-}
-
-
-
-
-
-
-
-
-
 
 window.addEventListener('DOMContentLoaded', () => {
 	const system = new System(settings.name)
 })
 
-function parseApplicationRoute(params) {
-	return [
-		window.location.pathname.split('/')[2],
-		params.get('route')
-	]
-}
 
 function bindScript(app) {
 	const script = document.createElement('script')
