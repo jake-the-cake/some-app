@@ -12,6 +12,14 @@
 			"version": "0.0.1"
 		}
 	},
+	"nonapps": {
+		"install": {
+			"name": "store",
+			"label": "Install Apps",
+			"href": "/store",
+			"src": "sys/pages/store.html"
+		}
+	},
 	"installed": [
 		"topics"
 	]

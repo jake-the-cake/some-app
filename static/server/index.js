@@ -23,16 +23,14 @@ class System {
 		this.isHealthy = true
 		this.isLoading = false
 		this.load()		
-		if (this.isHealthy === true) this.start()
 	}
 	
-	handleNavbar() {
+	async handleNavbar() {
 		this.navbar = new Navbar(this)
-		this.navbar.setup(this)
-		console.log('TODO: check for open tabs')
+		await this.navbar.setup(this)
 	}
 	
-	load() {
+	async load() {
 		this.isLoading = true
 		try {
 			this.main = document.querySelector('main')
@@ -41,13 +39,15 @@ class System {
 			this.loader = new LoadScreen()
 			this.loader.addLoader(this.main)
 
-			this.handleNavbar()
+			await this.handleNavbar()
 		
 			// handle footer
 			// this.handleFooter()
+			if (this.isHealthy === true) this.start()
 		} catch(e) {
 			// todo: set main section to error
 			this.loadErrorPage(500)
+			console.error(e)
 			throw Error('Could not load system interface.')
 		}
 	}
@@ -81,14 +81,15 @@ class System {
 		history.pushState({}, '', `/${ app }${ route }`)
 		bindScript(app)
 		this.startApp()
+		this.isLoading = false
 	}
 	
 	startApp() {
 		if (!this.isHealthy) return this.recover()
 		
-		setTimeout(() => {
-			this.isLoading = false
-		}, 500)
+		// setTimeout(() => {
+		// 	this.isLoading = false
+		// }, 500)
 		
 		const interval = setInterval(() => {
 			if (!this.isLoading) {

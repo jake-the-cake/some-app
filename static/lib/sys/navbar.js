@@ -25,20 +25,20 @@ class Navbar {
 		this.isDropped = false
 	}
 	
-	setupMenu() {
+	async setupMenu() {
 		this.isDropped = false
-		this.setupMenuLinks()
+		await this.setupMenuLinks()
 		this.menuHeight = this.menu.offsetHeight
 		this.setMenuUp()
 		this.createMenuListeners()
 	}
 
-	setupMenuLinks() {
-		this.menuLinks = this.addNenuLinks()
+	async setupMenuLinks() {
+		this.menuLinks = await this.addNenuLinks()
 	}
 
-	addNenuLinks() {
-    fetch('/static/data/apps.json')
+	async addNenuLinks() {
+   await fetch('/static/data/apps.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to load apps.json: ${response.statusText}`)
@@ -46,16 +46,26 @@ class Navbar {
             return response.json()
         })
         .then(appData => {
-            Object.keys(appData.apps).forEach(app => {
-                const link = document.createElement('li')
-                link.innerText = appData['apps'][app].label
-                link.onclick = () => {
-                    this.system.changeApp(app)
-                    this.setMenuUp()
-                }
-                this.menu.appendChild(link)
-            })
-        })
+					Object.keys(appData.apps).forEach(app => {
+						const link = document.createElement('li')
+						link.innerText = appData.apps[app].label
+						link.onclick = () => {
+							this.system.changeApp(app)
+							this.setMenuUp()
+						}
+						this.menu.appendChild(link)
+					})
+					Object.keys(appData.nonapps).forEach(app => {
+						const link = document.createElement('li')
+						link.classList.add('non-app')
+						link.innerText = appData.nonapps[app].label
+						link.onclick = () => {
+							this.system.changeApp(app)
+							this.setMenuUp()
+						}
+						this.menu.appendChild(link)
+					})
+				})
         .catch(error => {
             console.error('Error loading apps.json:', error)
         })
@@ -83,10 +93,10 @@ class Navbar {
 		return
 	}
 
-	setup(object) {
+	async setup(object) {
 		this.object = object
 		this.name.innerText = this.object.name
-		this.setupMenu()
+		await this.setupMenu()
 		this.setupTabs()
 	}
 }
