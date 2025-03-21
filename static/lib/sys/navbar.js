@@ -1,5 +1,7 @@
 class Navbar {
 
+	appDataUrl = '/static/data/apps.json'
+
 	constructor(system) {
 		this.element = document.querySelector('nav')
 		if (this.element === null) throw Error('No "nav" element found.')
@@ -37,24 +39,28 @@ class Navbar {
 		this.menuLinks = await this.addNenuLinks()
 	}
 
+	addAppLink(data) {
+		Object.keys(data).forEach(app => {
+			const link = document.createElement('li')
+			link.innerText = data[app].label
+			link.onclick = () => {
+				this.system.changeApp(app)
+				this.setMenuUp()
+			}
+			this.menu.appendChild(link)
+		})
+	}
+
 	async addNenuLinks() {
-   await fetch('/static/data/apps.json')
+   await fetch(this.appDataUrl)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to load apps.json: ${response.statusText}`)
+                throw new Error(`Failed to load ${ this.appDataUrl }: ${response.statusText}`)
             }
             return response.json()
         })
         .then(appData => {
-					Object.keys(appData.apps).forEach(app => {
-						const link = document.createElement('li')
-						link.innerText = appData.apps[app].label
-						link.onclick = () => {
-							this.system.changeApp(app)
-							this.setMenuUp()
-						}
-						this.menu.appendChild(link)
-					})
+					this.addAppLink(appData.apps)
 					Object.keys(appData.nonapps).forEach(app => {
 						const link = document.createElement('li')
 						link.classList.add('non-app')
