@@ -51,6 +51,19 @@ class Navbar {
 		})
 	}
 
+	addNonAppLink(data) {
+		Object.keys(data).forEach(app => {
+			const link = document.createElement('li')
+			link.classList.add('non-app')
+			link.innerText = data[app].label
+			link.onclick = () => {
+				this.system.changeApp(app)
+				this.setMenuUp()
+			}
+			this.menu.appendChild(link)
+		})
+	}
+
 	async addNenuLinks() {
    await fetch(this.appDataUrl)
         .then(response => {
@@ -61,16 +74,7 @@ class Navbar {
         })
         .then(appData => {
 					this.addAppLink(appData.apps)
-					Object.keys(appData.nonapps).forEach(app => {
-						const link = document.createElement('li')
-						link.classList.add('non-app')
-						link.innerText = appData.nonapps[app].label
-						link.onclick = () => {
-							this.system.changeApp(app)
-							this.setMenuUp()
-						}
-						this.menu.appendChild(link)
-					})
+					this.addNonAppLink(appData.nonapps)
 				})
         .catch(error => {
             console.error('Error loading apps.json:', error)
