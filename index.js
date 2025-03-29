@@ -4,13 +4,15 @@ const path = require('path')
 const { setupExpressServer } = require('./lib/setups')
 const { queryArray, isInPath, queryPathByPosition } = require('./lib/query')
 const { applications } = require('./lib/config')
-const { DECORATOR, PORT } = require('./lib/config/env')
+const { PORT } = require('./lib/config/env')
+const config = require('./lib/config/vars')
 const { accessApplication } = require('./lib/routing')
+const { DECORATOR } = config
 
 const app = Express()	
 
 setupExpressServer(app)
-console.log(DECORATOR)
+console.log(config)
 
 app.get('*', (req, res) => {	
 	console.log(req.path)
